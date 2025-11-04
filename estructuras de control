@@ -1,0 +1,18 @@
+#50.000k 5%         80.000 8%       100.000 10%
+
+# El cliente debe ingresar un valor de compra para recibir su descuento.
+
+valor = int(input("Ingrese el valor de su compra para recibir un descuento: "))
+valor2 = valor
+
+if (valor<80000 & valor>=50000):
+    valor*=0.05
+    print ("Ha obtenido un descuento del 5% y su compra vale: ", valor2-valor)
+elif (valor<100000 & valor>=80000):
+    valor*=0.08
+    print ("Ha obtenido un descuento del 8% y su compra vale: ", valor2-valor)
+elif (valor>=100000):
+    valor*=0.1
+    print ("Ha obtenido un descuento del 8% y su compra vale: ", valor2-valor)
+    
+    
