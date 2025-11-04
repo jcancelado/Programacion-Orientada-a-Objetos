@@ -3,4 +3,4 @@ class VentanaBase:
         raise NotImplementedError
 class VentanaPrincipal(VentanaBase):
     def mostrar(self):
-        print("Mostrnado valores")
+        print("Mostrnado valores")()
