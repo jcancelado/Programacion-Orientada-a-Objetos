@@ -1,6 +1,8 @@
-class VentanaBase:
-    def mostrar(self):
-        raise NotImplementedError
-class VentanaPrincipal(VentanaBase):
-    def mostrar(self):
-        print("Mostrnado valores")(
+
+import tkinter as tk
+from tkinter import tkk
+
+class App(tk.Tk):
+    def __init__(self):
+        super()
+
