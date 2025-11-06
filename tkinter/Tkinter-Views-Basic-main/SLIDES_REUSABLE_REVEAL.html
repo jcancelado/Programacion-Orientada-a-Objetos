@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Tkinter: Panel reutilizable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css" id="theme" />
+    <style>
+      .reveal pre code { font-size: 0.85em; line-height: 1.35; }
+      .unal-logo { position: fixed; right: 14px; bottom: 10px; width: 110px; opacity: 0.9; z-index: 10; }
+    </style>
+  </head>
+  <body>
+    <!-- Logo UNAL: reemplaza el src si prefieres un archivo local -->
+    <img class="unal-logo" alt="Universidad Nacional de Colombia" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Logotipo_de_la_Universidad_Nacional_de_Colombia.svg" />
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+## Tkinter: Panel reutilizable (misma vista, datos distintos)
+
+---
+
+### Objetivos (paso a paso)
+- Comprender `Frame` como “vista”.
+- Usar `StringVar` para cambiar texto sin recrear widgets.
+- Separar controlador (`App`) y vista (`InfoPanel`).
+
+---
+
+### Idea clave (en simple)
+Una misma “cajita” (`InfoPanel`) que cambia su texto. Nada de nuevas ventanas.
+
+---
+
+### Estructura (línea por línea)
+```python
+class InfoPanel(ttk.Frame):          # Vista: un Frame reutilizable
+    def __init__(self, parent):     # parent: contenedor (App)
+        super().__init__(parent)    # Inicializa el Frame
+        self.title_var = tk.StringVar()  # Texto del título (reactivo)
+        self.body_var = tk.StringVar()   # Texto del cuerpo (reactivo)
+        ttk.Label(self, textvariable=self.title_var).pack()  # Lee title_var
+        ttk.Label(self, textvariable=self.body_var).pack()   # Lee body_var
+
+    def update_data(self, title, body): # Cambia lo mostrado
+        self.title_var.set(title)
+        self.body_var.set(body)
+```
+
+---
+
+### Flujo de control (qué hace quién)
+- La `App` crea 1 `InfoPanel` y lo muestra.
+- Botones → métodos de la App → `panel.update_data(...)`.
+
+---
+
+### Demo
+```
+python .\\reusable_panel.py
+```
+
+---
+
+### Actividad (guiada)
+- Añade botón "Noticias" y método `_mostrar_noticias()`.
+- Llama `update_data("Noticias", "- Titular 1\n- Titular 2")`.
+- Aplica `ttk.Style` al título para resaltar.
+
+---
+
+### Buenas prácticas
+- `update_data(...)` es la “API” del panel.
+- Sin lógica de negocio en la vista; solo presentación.
+          </textarea>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        plugins: [ RevealMarkdown, RevealHighlight ],
+        margin: 0.06,
+      });
+    </script>
+  </body>
+  </html>
+
+

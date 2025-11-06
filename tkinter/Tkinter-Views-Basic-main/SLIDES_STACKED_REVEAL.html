@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Tkinter: Stacked Frames</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css" id="theme" />
+    <style>
+      .reveal pre code { font-size: 0.85em; line-height: 1.35; }
+      .unal-logo { position: fixed; right: 14px; bottom: 10px; width: 110px; opacity: 0.9; z-index: 10; }
+    </style>
+  </head>
+  <body>
+    <!-- Logo UNAL: reemplaza el src si prefieres un archivo local -->
+    <img class="unal-logo" alt="Universidad Nacional de Colombia" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Logotipo_de_la_Universidad_Nacional_de_Colombia.svg" />
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown>
+          <textarea data-template>
+## Tkinter: Stacked Frames (navegación sin nuevas ventanas)
+
+---
+
+### Objetivos (paso a paso)
+- Cambiar de pantalla sin ventanas nuevas.
+- Tratar cada pantalla como un `ttk.Frame`.
+- Mostrar la activa con `tkraise()`.
+
+---
+
+### Idea clave (imagen mental)
+Varias “hojas” en la misma celda. Subimos al frente la que queremos ver.
+
+---
+
+### Estructura (línea por línea)
+```python
+class App(tk.Tk):                      # Ventana principal
+    def __init__(self):
+        super().__init__()
+        container = ttk.Frame(self)     # Donde apilamos vistas
+        container.pack(fill="both", expand=True)
+        self.frames = {}                # name -> instancia
+        for View in (HomeView, SettingsView):  # Lista de vistas
+            f = View(container, self)   # parent, controller
+            self.frames[View.__name__] = f
+            f.grid(row=0, column=0, sticky="nsew")  # Misma celda para todas
+
+    def show_frame(self, name):         # Cambia la vista
+        self.frames[name].tkraise()     # Sube esa vista
+```
+
+---
+
+### ¿Qué es el "controller"? (App)
+- La App decide qué vista se ve.
+- Las vistas piden cambios a `controller.show_frame(...)`.
+```python
+f = View(container, self)  # self = App como controller
+```
+
+---
+
+### Interfaz mínima del controller
+```python
+def show_frame(self, name: str):
+    self.frames[name].tkraise()
+```
+- Única responsabilidad: mostrar la vista pedida.
+
+---
+
+### El bucle for: registrar vistas
+- Recorre clases, crea instancias y las guarda en `self.frames`.
+```python
+for View in (HomeView, SettingsView, AboutView):
+    inst = View(container, self)
+    self.frames[View.__name__] = inst
+    inst.grid(row=0, column=0, sticky='nsew')
+```
+
+---
+
+### ¿Por qué usar View.__name__ como clave?
+- Legible y coherente con el nombre de la clase.
+- Alternativa: constantes/Enum para nombres de rutas.
+
+---
+
+### ¿Cómo navega una vista?
+```python
+class HomeView(ttk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        ttk.Button(self, text='Ir a Settings',
+                   command=lambda: controller.show_frame('SettingsView')).pack()
+```
+
+### Flujo de control (roles)
+- `App` decide qué vista se ve.
+- Las vistas piden cambios llamando a `controller.show_frame(...)`.
+
+---
+
+### Demo
+```
+python .\\stacked_frames.py
+```
+
+---
+
+### Actividad (guiada)
+- Crear `FormView` (Nombre/Email + "Enviar").
+- Botón en `HomeView`: "Ir a Form".
+- Botón "Volver" en `FormView` → `HomeView`.
+
+---
+
+### Buenas prácticas
+- No crear ventanas por sección; todo en una sola.
+- Navegación centralizada = código sencillo y testeable.
+          </textarea>
+        </section>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        slideNumber: 'c/t',
+        plugins: [ RevealMarkdown, RevealHighlight ],
+        margin: 0.06,
+      });
+    </script>
+  </body>
+  </html>
+
+
