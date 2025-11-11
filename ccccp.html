@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcial de POO - Python</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .timer-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .timer {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        .timer.warning {
+            color: #ffc107;
+        }
+        .timer.danger {
+            color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .exercise-card {
+            margin-bottom: 2rem;
+            border-left: 4px solid #0d6efd;
+        }
+        .exercise-card.polymorphism {
+            border-left-color: #0d6efd;
+        }
+        .exercise-card.tkinter {
+            border-left-color: #198754;
+        }
+        .exercise-card.firebase {
+            border-left-color: #ffc107;
+        }
+        .exercise-card.mvvm {
+            border-left-color: #dc3545;
+        }
+        .topic-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .fill-blank-input {
+            display: inline-block;
+            min-width: 150px;
+            margin: 0 5px;
+            border-bottom: 2px solid #0d6efd;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .sortable-list {
+            list-style: none;
+            padding: 0;
+        }
+        .sortable-item {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            cursor: move;
+            transition: all 0.3s;
+        }
+        .sortable-item:hover {
+            background: #e9ecef;
+            border-color: #0d6efd;
+        }
+        .sortable-item.dragging {
+            opacity: 0.5;
+        }
+        .progress-bar-container {
+            margin-bottom: 2rem;
+        }
+        .deliverable-area {
+            background: #f8f9fa;
+            border: 2px solid #0d6efd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .code-snippet {
+            background: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-clipboard-check"></i> Parcial de POO
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5">
+        <!-- Timer -->
+        <div class="timer-container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-clock"></i> Tiempo Restante</h4>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="timer" id="timer">15:00</div>
+                </div>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar" id="progressBar" role="progressbar" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-4">
+            <h1><i class="fas fa-graduation-cap"></i> Parcial de Programación Orientada a Objetos</h1>
+            <p class="lead">Python - Polimorfismo, Tkinter, Firebase Realtime Database, MVVM</p>
+        </div>
+
+        <!-- Ejercicio 1: Polimorfismo - Opción Múltiple -->
+        <div class="card shadow exercise-card polymorphism" data-exercise="1" data-topic="Polimorfismo" data-type="multiple-choice">
+            <div class="card-header bg-primary text-white position-relative">
+                <h4><i class="fas fa-question-circle"></i> Ejercicio 1: Polimorfismo</h4>
+                <span class="badge bg-light text-dark topic-badge">Polimorfismo</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">¿Cuál de las siguientes opciones es un ejemplo correcto de polimorfismo en Python?</p>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise1" id="ex1a" value="a" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex1a">
+                        a) Definir múltiples métodos con el mismo nombre en diferentes clases
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise1" id="ex1b" value="b" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex1b">
+                        b) Usar el mismo método en diferentes clases que se comportan de manera diferente
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise1" id="ex1c" value="c" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex1c">
+                        c) Crear variables con el mismo nombre en diferentes funciones
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise1" id="ex1d" value="d" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex1d">
+                        d) Importar múltiples módulos con el mismo nombre
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 2: Tkinter - Completar Código -->
+        <div class="card shadow exercise-card tkinter" data-exercise="2" data-topic="Tkinter" data-type="fill-blank">
+            <div class="card-header bg-success text-white position-relative">
+                <h4><i class="fas fa-code"></i> Ejercicio 2: Tkinter</h4>
+                <span class="badge bg-light text-dark topic-badge">Tkinter</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Completa el siguiente código para crear una ventana con un botón en Tkinter:</p>
+                <div class="code-snippet">
+                    <code>
+import tkinter as tk<br>
+<br>
+root = <input type="text" class="fill-blank-input" id="ex2a" placeholder="tk.Window()" value="tk.Window()" onchange="updateDeliverable()"><br>
+root.title("Mi Aplicación")<br>
+<br>
+btn = tk.<input type="text" class="fill-blank-input" id="ex2b" placeholder="Btn" value="Btn" onchange="updateDeliverable()">(root, text="Click Me")<br>
+btn.<input type="text" class="fill-blank-input" id="ex2c" placeholder="show()" value="show()" onchange="updateDeliverable()"><br>
+<br>
+root.<input type="text" class="fill-blank-input" id="ex2d" placeholder="loop()" value="loop()" onchange="updateDeliverable()">
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 3: Firebase - Ordenar Procesos -->
+        <div class="card shadow exercise-card firebase" data-exercise="3" data-topic="Firebase" data-type="sort">
+            <div class="card-header bg-warning text-dark position-relative">
+                <h4><i class="fas fa-sort"></i> Ejercicio 3: Firebase Realtime Database</h4>
+                <span class="badge bg-light text-dark topic-badge">Firebase</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Ordena los siguientes pasos para realizar una operación CRUD completa en Firebase:</p>
+                <ul class="sortable-list" id="sortList3">
+                    <li class="sortable-item" draggable="true" data-order="3">Inicializar Firebase Admin SDK con credenciales</li>
+                    <li class="sortable-item" draggable="true" data-order="1">Obtener referencia a la base de datos</li>
+                    <li class="sortable-item" draggable="true" data-order="4">Realizar operación (get, set, update, delete)</li>
+                    <li class="sortable-item" draggable="true" data-order="2">Navegar a la ruta deseada (child)</li>
+                </ul>
+                <small class="text-muted"><i class="fas fa-info-circle"></i> Arrastra los elementos para ordenarlos correctamente</small>
+            </div>
+        </div>
+
+        <!-- Ejercicio 4: MVVM - Opción Múltiple -->
+        <div class="card shadow exercise-card mvvm" data-exercise="4" data-topic="MVVM" data-type="multiple-choice">
+            <div class="card-header bg-danger text-white position-relative">
+                <h4><i class="fas fa-question-circle"></i> Ejercicio 4: Patrón MVVM</h4>
+                <span class="badge bg-light text-dark topic-badge">MVVM</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">En el patrón MVVM, ¿qué componente es responsable de la lógica de negocio y la comunicación con el modelo?</p>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise4" id="ex4a" value="a" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex4a">
+                        a) Model
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise4" id="ex4b" value="b" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex4b">
+                        b) View
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise4" id="ex4c" value="c" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex4c">
+                        c) ViewModel
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise4" id="ex4d" value="d" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex4d">
+                        d) Controller
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 5: Polimorfismo - Completar Código -->
+        <div class="card shadow exercise-card polymorphism" data-exercise="5" data-topic="Polimorfismo" data-type="fill-blank">
+            <div class="card-header bg-primary text-white position-relative">
+                <h4><i class="fas fa-code"></i> Ejercicio 5: Polimorfismo</h4>
+                <span class="badge bg-light text-dark topic-badge">Polimorfismo</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Completa el código para implementar polimorfismo con métodos que tienen el mismo nombre:</p>
+                <div class="code-snippet">
+                    <code>
+class Animal:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def <input type="text" class="fill-blank-input" id="ex5a" placeholder="emitir_sonido" value="emitir_sonido" onchange="updateDeliverable()">(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pass<br>
+<br>
+class Perro(Animal):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def hacer_sonido(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return <input type="text" class="fill-blank-input" id="ex5b" placeholder='"Woof"' value='"Woof"' onchange="updateDeliverable()"><br>
+<br>
+class Gato(Animal):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def hacer_sonido(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return <input type="text" class="fill-blank-input" id="ex5c" placeholder='"Meow"' value='"Meow"' onchange="updateDeliverable()">
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 6: Tkinter - Ordenar Procesos -->
+        <div class="card shadow exercise-card tkinter" data-exercise="6" data-topic="Tkinter" data-type="sort">
+            <div class="card-header bg-success text-white position-relative">
+                <h4><i class="fas fa-sort"></i> Ejercicio 6: Tkinter</h4>
+                <span class="badge bg-light text-dark topic-badge">Tkinter</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Ordena los pasos para crear una interfaz gráfica completa en Tkinter:</p>
+                <ul class="sortable-list" id="sortList6">
+                    <li class="sortable-item" draggable="true" data-order="2">Crear widgets (botones, labels, etc.)</li>
+                    <li class="sortable-item" draggable="true" data-order="4">Ejecutar mainloop() para iniciar la aplicación</li>
+                    <li class="sortable-item" draggable="true" data-order="1">Crear la ventana principal (tk.Tk())</li>
+                    <li class="sortable-item" draggable="true" data-order="3">Posicionar widgets con pack(), grid() o place()</li>
+                </ul>
+                <small class="text-muted"><i class="fas fa-info-circle"></i> Arrastra los elementos para ordenarlos correctamente</small>
+            </div>
+        </div>
+
+        <!-- Ejercicio 7: Firebase - Opción Múltiple -->
+        <div class="card shadow exercise-card firebase" data-exercise="7" data-topic="Firebase" data-type="multiple-choice">
+            <div class="card-header bg-warning text-dark position-relative">
+                <h4><i class="fas fa-question-circle"></i> Ejercicio 7: Firebase Realtime Database</h4>
+                <span class="badge bg-light text-dark topic-badge">Firebase</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">¿Cuál es la estructura de datos que utiliza Firebase Realtime Database?</p>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise7" id="ex7a" value="a" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex7a">
+                        a) Tablas relacionales (SQL)
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise7" id="ex7b" value="b" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex7b">
+                        b) Documentos JSON anidados
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise7" id="ex7c" value="c" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex7c">
+                        c) Grafos de nodos
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise7" id="ex7d" value="d" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex7d">
+                        d) Columnas y filas (CSV)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 8: MVVM - Completar Código -->
+        <div class="card shadow exercise-card mvvm" data-exercise="8" data-topic="MVVM" data-type="fill-blank">
+            <div class="card-header bg-danger text-white position-relative">
+                <h4><i class="fas fa-code"></i> Ejercicio 8: Patrón MVVM</h4>
+                <span class="badge bg-light text-dark topic-badge">MVVM</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Completa el código para separar las responsabilidades según el patrón MVVM:</p>
+                <div class="code-snippet">
+                    <code>
+# Model<br>
+class UserModel:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, name, email):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.name = name<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.email = email<br>
+<br>
+# ViewModel<br>
+class UserViewModel:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def __init__(self, <input type="text" class="fill-blank-input" id="ex8a" placeholder="user_model" value="user_model" onchange="updateDeliverable()">):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;self.model = model<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def get_display_name(self):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return f"{self.model.name} ({self.model.<input type="text" class="fill-blank-input" id="ex8b" placeholder="mail" value="mail" onchange="updateDeliverable()">})"
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 9: Tkinter - Opción Múltiple -->
+        <div class="card shadow exercise-card tkinter" data-exercise="9" data-topic="Tkinter" data-type="multiple-choice">
+            <div class="card-header bg-success text-white position-relative">
+                <h4><i class="fas fa-question-circle"></i> Ejercicio 9: Tkinter</h4>
+                <span class="badge bg-light text-dark topic-badge">Tkinter</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">¿Cuál es el método correcto para posicionar un widget en Tkinter usando el gestor de geometría grid?</p>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise9" id="ex9a" value="a" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex9a">
+                        a) widget.grid(row=0, column=0)
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise9" id="ex9b" value="b" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex9b">
+                        b) widget.position(row=0, column=0)
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise9" id="ex9c" value="c" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex9c">
+                        c) widget.set_position(0, 0)
+                    </label>
+                </div>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="exercise9" id="ex9d" value="d" onchange="updateDeliverable()">
+                    <label class="form-check-label" for="ex9d">
+                        d) widget.place(row=0, column=0)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicio 10: Firebase - Completar Código -->
+        <div class="card shadow exercise-card firebase" data-exercise="10" data-topic="Firebase" data-type="fill-blank">
+            <div class="card-header bg-warning text-dark position-relative">
+                <h4><i class="fas fa-code"></i> Ejercicio 10: Firebase Realtime Database</h4>
+                <span class="badge bg-light text-dark topic-badge">Firebase</span>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold">Completa el código para leer datos de Firebase Realtime Database:</p>
+                <div class="code-snippet">
+                    <code>
+import firebase_admin<br>
+from firebase_admin import <input type="text" class="fill-blank-input" id="ex10a" placeholder="credential" value="credential" onchange="updateDeliverable()">, db<br>
+<br>
+cred = credentials.Certificate("serviceAccountKey.json")<br>
+firebase_admin.initialize_app(cred, {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'databaseURL': <input type="text" class="fill-blank-input" id="ex10b" placeholder='"https://tu-proyecto.firebaseio.com"' value='"https://tu-proyecto.firebaseio.com"' onchange="updateDeliverable()"><br>
+})<br>
+<br>
+ref = db.<input type="text" class="fill-blank-input" id="ex10c" placeholder="ref" value="ref" onchange="updateDeliverable()">()<br>
+users = ref.child('users').<input type="text" class="fill-blank-input" id="ex10d" placeholder="read" value="read" onchange="updateDeliverable()">()
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de Entregable -->
+        <div class="card shadow mt-5">
+            <div class="card-header bg-dark text-white">
+                <h4><i class="fas fa-file-alt"></i> Área de Entregable</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Este es el texto que debes copiar y entregar en la plataforma correspondiente:</p>
+                <div class="deliverable-area" id="deliverableArea">
+RESPUESTAS DEL PARCIAL DE POO
+================================
+
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i> Copiar al Portapapeles
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAll()">
+                        <i class="fas fa-redo"></i> Limpiar Todo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Timer
+        let totalTime = 30 * 60; // 30 minutos en segundos
+        let timeRemaining = totalTime;
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert('¡Tiempo agotado!');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timerEl = document.getElementById('timer');
+            const progressBar = document.getElementById('progressBar');
+            
+            timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            const progress = (timeRemaining / totalTime) * 100;
+            progressBar.style.width = progress + '%';
+            
+            if (progress <= 20) {
+                timerEl.className = 'timer danger';
+                progressBar.className = 'progress-bar bg-danger';
+            } else if (progress <= 40) {
+                timerEl.className = 'timer warning';
+                progressBar.className = 'progress-bar bg-warning';
+            } else {
+                timerEl.className = 'timer';
+                progressBar.className = 'progress-bar bg-success';
+            }
+        }
+
+        // Drag and Drop para ordenar
+        let draggedElement = null;
+
+        document.querySelectorAll('.sortable-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedElement = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+
+            item.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            });
+
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (draggedElement && draggedElement !== this) {
+                    const parent = this.parentNode;
+                    const allItems = Array.from(parent.children);
+                    const draggedIndex = allItems.indexOf(draggedElement);
+                    const targetIndex = allItems.indexOf(this);
+                    
+                    if (draggedIndex < targetIndex) {
+                        parent.insertBefore(draggedElement, this.nextSibling);
+                    } else {
+                        parent.insertBefore(draggedElement, this);
+                    }
+                    updateDeliverable();
+                }
+            });
+        });
+
+        // Actualizar área de entregable
+        function updateDeliverable() {
+            const deliverableArea = document.getElementById('deliverableArea');
+            let content = 'RESPUESTAS DEL PARCIAL DE POO\n';
+            content += '================================\n\n';
+            
+            // Recorrer todos los ejercicios
+            document.querySelectorAll('[data-exercise]').forEach(card => {
+                const exerciseNum = card.dataset.exercise;
+                const topic = card.dataset.topic;
+                const type = card.dataset.type;
+                
+                content += `EJERCICIO ${exerciseNum}: ${topic}\n`;
+                content += `Tipo: ${type === 'multiple-choice' ? 'Opción Múltiple' : type === 'fill-blank' ? 'Completar Código' : 'Ordenar Procesos'}\n`;
+                
+                if (type === 'multiple-choice') {
+                    const selected = card.querySelector('input[type="radio"]:checked');
+                    if (selected) {
+                        content += `Respuesta: ${selected.value.toUpperCase()}\n`;
+                    } else {
+                        content += `Respuesta: (Sin responder)\n`;
+                    }
+                } else if (type === 'fill-blank') {
+                    const inputs = card.querySelectorAll('.fill-blank-input');
+                    inputs.forEach((input, index) => {
+                        const value = input.value || '(vacío)';
+                        content += `  Campo ${index + 1}: ${value}\n`;
+                    });
+                } else if (type === 'sort') {
+                    const list = card.querySelector('.sortable-list');
+                    const items = Array.from(list.children);
+                    content += `Orden:\n`;
+                    items.forEach((item, index) => {
+                        content += `  ${index + 1}. ${item.textContent.trim()}\n`;
+                    });
+                }
+                
+                content += '\n';
+            });
+            
+            deliverableArea.textContent = content;
+        }
+
+        // Copiar al portapapeles
+        function copyToClipboard() {
+            const deliverableArea = document.getElementById('deliverableArea');
+            const text = deliverableArea.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('¡Texto copiado al portapapeles!');
+            }).catch(err => {
+                // Fallback para navegadores antiguos
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('¡Texto copiado al portapapeles!');
+            });
+        }
+
+        // Limpiar todo
+        function clearAll() {
+            if (confirm('¿Estás seguro de que quieres limpiar todas las respuestas?')) {
+                // Limpiar opciones múltiples
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                
+                // Limpiar campos de texto
+                document.querySelectorAll('.fill-blank-input').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Resetear orden de listas (opcional, mantener orden original)
+                updateDeliverable();
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            startTimer();
+            updateDeliverable();
+            
+            // Agregar listeners a todos los inputs
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', updateDeliverable);
+            });
+        });
+    </script>
+</body>
+</html>
+
