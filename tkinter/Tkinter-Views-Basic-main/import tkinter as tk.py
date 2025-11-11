@@ -28,6 +28,8 @@ class App(tk.Tk):
         ttk.Button(self, text="Guardar", command=self.guardar).pack(pady=10)
         ttk.Button(self, text="Mostrar todos", command=self.mostrar).pack()
 
+        self.bind('<Control-s>', lambda event: guardar())
+
     def guardar(self):
         nombre = self.nombre.get()
         edad = self.edad.get()
@@ -42,6 +44,8 @@ class App(tk.Tk):
         print("Usuarios en Firebase:")
         for k, v in usuarios.items():
             print(f"- {v['nombre']} ({v['edad']} años)")
+    def guardar(self):
+        print("si señorita directora")
 
 
 if __name__ == "__main__":

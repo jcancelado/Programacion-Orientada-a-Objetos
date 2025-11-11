@@ -15,7 +15,7 @@ class App(tk.Tk):  # Define la aplicación principal heredando de tk.Tk (la vent
         self.frames = {}
 
         # Lista de clases de vistas que queremos crear y apilar
-        for ViewClass in (HomeView, SettingsView, AboutView):  # Itera sobre cada clase de vista
+        for ViewClass in (HomeView, SettingsView, AboutView, FormView):  # Itera sobre cada clase de vista
             view_instance = ViewClass(container, self)  # Instancia la vista; parent=container, controller=self
             name = ViewClass.__name__  # Obtiene el nombre de la clase (clave del diccionario)
             self.frames[name] = view_instance  # Guarda la instancia en el diccionario de vistas
@@ -60,6 +60,14 @@ class HomeView(ttk.Frame):  # Define la vista "Home" como un Frame estilizado (t
             command=lambda: controller.show_frame("AboutView"),  # Acción: mostrar la vista About
         )
         btn_about.pack(side="left", padx=6)  # Empaqueta el botón a la izquierda con separación
+
+        # Botón: ir a form
+        btn_form = ttk.Button(
+            nav,
+            text="Ir a Form",
+            command=lambda: controller.show_frame("FormView"),  # Acción: mostrar la vista About
+        )
+        btn_form.pack(side="left", padx=6)  # Empaqueta el botón a la izquierda con separación
 
 
 class SettingsView(ttk.Frame):  # Define la vista "Settings"
@@ -115,7 +123,48 @@ class AboutView(ttk.Frame):  # Define la vista "About"
         ttk.Button(self, text="Volver a Home", command=lambda: controller.show_frame("HomeView")).pack(pady=6)  # Regresa a Home
 
 
+class FormView(ttk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+
+        ttk.Label(self, text="Formulario", font=("arial", 14, "bold")).grid(row=0, column=0, columnspan=5, pady=(16, 8))
+
+        # Variables de entrada
+        self.var_nom = tk.StringVar()
+        self.var_correo = tk.StringVar()
+
+        # Cada vez que cambie el contenido, se llama a self._verificar_campos
+        self.var_nom.trace_add("write", self._verificar_campos)
+        self.var_correo.trace_add("write", self._verificar_campos)
+
+        # Etiquetas y entradas
+        ttk.Label(self, text="Nombre", font=("arial", 10, "bold")).grid(row=1, column=1)
+        ttk.Entry(self, textvariable=self.var_nom).grid(row=2, column=1)
+
+        ttk.Label(self, text="Correo", font=("arial", 10, "bold")).grid(row=1, column=2)
+        ttk.Entry(self, textvariable=self.var_correo).grid(row=2, column=2)
+
+        # Botones
+        self.boton_enviar = ttk.Button(self, text="Enviar", command=self._enviar, state="disabled")  # <- deshabilitado al inicio
+        self.boton_enviar.grid(row=3, column=1, pady=16)
+
+        ttk.Button(self, text="Volver a Home",
+                   command=lambda: controller.show_frame("HomeView")).grid(row=3, column=2, pady=16)
+
+    def _verificar_campos(self, *args):
+        """Habilita el botón si ambos campos tienen texto."""
+        if self.var_nom.get().strip() and self.var_correo.get().strip():
+            self.boton_enviar.state(["!disabled"])  # habilita
+        else:
+            self.boton_enviar.state(["disabled"])  # deshabilita
+
+    def _enviar(self):
+        print("Formulario enviado, nombre:", self.var_nom.get(), "correo:", self.var_correo.get())
+
+
+
 if __name__ == "__main__":  # Punto de entrada del script
-    App().mainloop()  # Crea la app y entra en el bucle principal de eventos de Tkinter
+    app= App()
+    app.mainloop()  # Crea la app y entra en el bucle principal de eventos de Tkinter
 
 
